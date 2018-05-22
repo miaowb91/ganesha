@@ -10,8 +10,8 @@ import lombok.Getter;
 @Getter
 public enum  ResultCode {
 
-    Success("0000","成功"),
-    Error("1000","失败");
+    SUCCESS("000000","成功"),
+    ERROR("100000","失败");
 
     /**
      * 状态码

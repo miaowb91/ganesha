@@ -63,12 +63,146 @@
     </dependencies>
 
     <build>
+        <finalName>${project.artifactId}-${project.version}</finalName>
+
         <plugins>
+            <!--用于编译Maven项目的Java源代码-->
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+            <!--surefire 插件用来在maven构建生命周期的test phase执行一个应用的单元测试。它会产生两种不同形式
+            的测试结果报告：纯文本、XML格式,它可以运行任何testNG,Junit,pojo写的单元测试-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <!--跳过测试-->
+                <configuration>
+                    <skipTests>true</skipTests>
+                </configuration>
+            </plugin>
+            <!--用于打包可执行jar包-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+            </plugin>
+            <!--maven打成源码包-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+            </plugin>
+            <!--默认绑定在maven的生命周期install阶段-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+            </plugin>
+            <!--maven项目部署到Repository(Nexus)-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
             </plugin>
         </plugins>
+
+        <pluginManagement>
+            <plugins>
+                <!--用于编译Maven项目的Java源代码-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <configuration>
+                        <source>${java.version}</source>
+                        <target>${java.version}</target>
+                        <encoding>${project.build.sourceEncoding}</encoding>
+                        <maxmem>1024m</maxmem>
+                        <compilerArgs>
+                            <arg>-Xlint:none</arg>
+                        </compilerArgs>
+                    </configuration>
+                </plugin>
+
+                <!--用于打包可执行jar包-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>2.5</version>
+                    <configuration>
+                        <archive>
+                            <addMavenDescriptor>false</addMavenDescriptor>
+                            <manifest>
+                                <addDefaultSpecificationEntries>true
+                                </addDefaultSpecificationEntries>
+                                <addDefaultImplementationEntries>true
+                                </addDefaultImplementationEntries>
+                            </manifest>
+                            <manifestEntries>
+                                <X-Compile-Source-JDK>${java.version}</X-Compile-Source-JDK>
+                                <X-Compile-Target-JDK>${java.version}</X-Compile-Target-JDK>
+                            </manifestEntries>
+                        </archive>
+                    </configuration>
+                </plugin>
+
+                <!--maven打成源码包-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <configuration>
+                        <attach>true</attach>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>jar-no-fork</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <!--生成可直接运行jar-->
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                            <configuration>
+                                <classifier>exec</classifier>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin-ext</artifactId>
+                    <version>1.5.2.RELEASE</version>
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>repackage</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>2.5.2</version>
+                </plugin>
+
+                <!--deploy插件用于把Maven自动构建生成的版本发布到中央代理仓库如Nexus服务器上，
+                也能把第三方依赖库(如Jar包)或一个独立的Jar包直接发布到中央代理仓库供大家共享使用-->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.8.2</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
     </build>
 
 </project>

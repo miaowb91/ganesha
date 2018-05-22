@@ -29,6 +29,52 @@ public class Result<T> implements Serializable {
      */
     private T data;
 
+    public Result() {
+    }
 
+    public Result(String code,String msg, T data) {
+        this.code = code;
+        this.msg = msg;
+        this.data = data;
+    }
+
+    public Result(String code,String msg) {
+        this.code = code;
+        this.msg = msg;
+    }
+
+    /**
+     * 返回成功
+     */
+    public static <T> Result<T> createBySuccess(){
+        return new Result<>(ResultCode.SUCCESS.getCode(),ResultCode.SUCCESS.getMsg());
+    }
+
+    public static <T> Result<T> createBySuccessWithMsg(String msg){
+        return new Result<T>(ResultCode.SUCCESS.getCode(),msg);
+    }
+
+    public static <T> Result<T> createBySuccess(T data){
+        return new Result<T>(ResultCode.SUCCESS.getCode(),ResultCode.SUCCESS.getMsg(),data);
+    }
+
+    public static <T> Result<T> createBySuccess(String msg, T data){
+        return new Result<T>(ResultCode.SUCCESS.getCode(),msg,data);
+    }
+
+    /**
+     * 返回失败
+     */
+    public static <T> Result<T> createByError(){
+        return new Result<>(ResultCode.ERROR.getCode(),ResultCode.ERROR.getMsg());
+    }
+
+    public static <T> Result<T> createByError(String msg){
+        return new Result<T>(ResultCode.ERROR.getCode(),msg);
+    }
+
+    public static <T> Result<T> createByError(String code, String msg){
+        return new Result<T>(code,msg);
+    }
 
 }
