@@ -2,23 +2,15 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
-
-    <modules>
-        <module>ganesha-asset-service</module>
-        <module>ganesha-asset-entity</module>
-        <module>ganesha-asset-api</module>
-    </modules>
-
     <parent>
-        <artifactId>ganesha-parent</artifactId>
+        <artifactId>ganesha-asset</artifactId>
         <groupId>com.epicc</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
-    
-    <artifactId>ganesha-asset</artifactId>
-    <packaging>pom</packaging>
-    <version>0.0.1-SNAPSHOT</version>
+    <modelVersion>4.0.0</modelVersion>
 
+    <artifactId>ganesha-asset-entity</artifactId>
+
+    <packaging>jar</packaging>
 
 </project>
