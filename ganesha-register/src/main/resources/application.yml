@@ -1,6 +1,7 @@
 spring:
   application:
     name: discovery-cluster
+
 ---
 spring:
   profiles: discovery1
@@ -8,11 +9,13 @@ server:
   port: 8761
 eureka:
   instance:
-    hostname: localhost
+    hostname: discovery1
     preferIpAddress: true
   client:
     service-url:
       default-zone: http://${eureka.instance.hostname}:8762/eureka
+    register-with-eureka: false
+    fetch-registry: false
 
 ---
 spring:
@@ -21,8 +24,10 @@ server:
   port: 8762
 eureka:
   instance:
-    hostname: localhost
+    hostname: discovery2
     preferIpAddress: true
   client:
     service-url:
       default-zone: http://${eureka.instance.hostname}:8761/eureka
+    register-with-eureka: false
+    fetch-registry: false

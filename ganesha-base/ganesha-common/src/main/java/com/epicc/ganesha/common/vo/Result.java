@@ -77,4 +77,5 @@ public class Result<T> implements Serializable {
         return new Result<T>(code,msg);
     }
 
+
 }
