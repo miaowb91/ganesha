@@ -3,13 +3,15 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>ganesha-asset</artifactId>
+        <artifactId>ganesha-parent</artifactId>
         <groupId>com.epicc</groupId>
         <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../ganesha-base/ganesha-parent/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>ganesha-asset-api</artifactId>
+    <artifactId>ganesha-front-wap</artifactId>
+
     <packaging>jar</packaging>
 
     <dependencies>
@@ -32,22 +34,19 @@
 
         <dependency>
             <groupId>com.epicc</groupId>
-            <artifactId>ganesha-asset-entity</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.epicc</groupId>
-            <artifactId>ganesha-asset-service</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.epicc</groupId>
             <artifactId>ganesha-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

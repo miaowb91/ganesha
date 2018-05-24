@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: WapFrontDemo
+server:
+  port: 8000
+
+redis:
+  sentinel: false
+  masterName: resque
+  maxIdle: 200
+  maxTotal: 2048
+  maxWaitMillis: 1000
+  hosts: 127.0.0.1:6379
+  db: 0
+  password:

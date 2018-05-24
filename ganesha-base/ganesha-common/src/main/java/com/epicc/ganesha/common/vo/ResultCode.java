@@ -11,7 +11,8 @@ import lombok.Getter;
 public enum  ResultCode {
 
     SUCCESS("000000","成功"),
-    ERROR("100000","失败");
+    ERROR("100000","失败"),
+    MOBILE_FORMAT_ERROR("200001","手机号码格式错误");
 
     /**
      * 状态码
