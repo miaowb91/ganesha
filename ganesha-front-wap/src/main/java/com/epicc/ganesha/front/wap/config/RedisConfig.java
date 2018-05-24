@@ -41,6 +41,7 @@ public class RedisConfig {
             redis_password = null;
         }
         if(redis_sentinel) {
+            //哨兵集群配置
             JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
             jedisPoolConfig.setMaxIdle(redis_maxIdle);
             jedisPoolConfig.setMaxTotal(redis_maxTotal);
@@ -56,7 +57,7 @@ public class RedisConfig {
             return new JedisSentinelPool(redis_masterName, sentinels, jedisPoolConfig,
                     Protocol.DEFAULT_TIMEOUT, redis_password, redis_db);
         } else {
-            //初始化jedis
+            //单点配置
             JedisPoolConfig jedisPoolConfig = new JedisPoolConfig();
             jedisPoolConfig.setMaxIdle(redis_maxIdle);
             jedisPoolConfig.setMaxTotal(redis_maxTotal);

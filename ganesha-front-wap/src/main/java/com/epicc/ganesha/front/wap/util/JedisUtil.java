@@ -116,4 +116,17 @@ public class JedisUtil {
             throw new RuntimeException("Jedis set Error");
         }
     }
+
+    /**
+     * 计数器
+     * @param key 关键字
+     */
+    public void incr(String key){
+        try(Jedis jedis = this.getResource()){
+            jedis.incr(key);
+        }catch (Exception e){
+            log.error("jedis incr Key:{}", key, e);
+            throw new RuntimeException("Jedis incr Error");
+        }
+    }
 }

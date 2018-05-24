@@ -77,5 +77,10 @@ public class Result<T> implements Serializable {
         return new Result<>(code,msg);
     }
 
-
+    public boolean isSuccess(){
+        if(code.equals(ResultCode.SUCCESS.getCode())){
+            return true;
+        }
+        return false;
+    }
 }
