@@ -3,7 +3,7 @@ spring:
     name: WapFrontDemo
   thymeleaf:
     cache: false
-    content-type: text/xml
+    content-type: text/html
     enabled: true
     encoding: UTF-8
     mode: HTML5
