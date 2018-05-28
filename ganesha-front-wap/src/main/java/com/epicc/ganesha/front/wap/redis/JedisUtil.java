@@ -1,4 +1,4 @@
-package com.epicc.ganesha.front.wap.util;
+package com.epicc.ganesha.front.wap.redis;
 
 
 import lombok.extern.slf4j.Slf4j;
@@ -41,9 +41,6 @@ public class JedisUtil {
     public String get(String key){
         try (Jedis jedis = this.getResource()) {
             return jedis.get(key);
-        } catch (Exception e) {
-            log.error("jedis get Key:{}", key, e);
-            throw new RuntimeException("Jedis get Error");
         }
     }
 
@@ -54,9 +51,6 @@ public class JedisUtil {
     public boolean exists(String key){
         try (Jedis jedis = this.getResource()) {
             return jedis.exists(key);
-        } catch (Exception e) {
-            log.error("jedis exists Key:{}", key, e);
-            return false;
         }
     }
 
@@ -68,9 +62,6 @@ public class JedisUtil {
     public String set(String key, String value){
         try (Jedis jedis = this.getResource()) {
             return jedis.set(key, value);
-        } catch (Exception e) {
-            log.error("jedis set Key:{}", key, e);
-            throw new RuntimeException("Jedis set Error");
         }
     }
 
@@ -82,9 +73,6 @@ public class JedisUtil {
     public Long expired(String key, Integer expiredTime){
         try (Jedis jedis = this.getResource()) {
             return jedis.expire(key, expiredTime);
-        } catch (Exception e) {
-            log.error("jedis expire Key:{}", key, e);
-            throw new RuntimeException("Jedis expire Error");
         }
     }
 
@@ -95,9 +83,6 @@ public class JedisUtil {
     public Long del(String key){
         try (Jedis jedis = this.getResource()) {
             return jedis.del(key);
-        } catch (Exception e) {
-            log.error("jedis del Key:{}", key, e);
-            throw new RuntimeException("Jedis del Error");
         }
     }
 
@@ -109,11 +94,7 @@ public class JedisUtil {
      */
     public void set(String key,String value,Integer expiredTime){
         try(Jedis jedis = this.getResource()){
-            jedis.set(key, value);
-            jedis.expire(key,expiredTime);
-        }catch (Exception e){
-            log.error("jedis set Key:{}", key, e);
-            throw new RuntimeException("Jedis set Error");
+            jedis.setex(key, expiredTime,value);
         }
     }
 
@@ -122,11 +103,8 @@ public class JedisUtil {
      * @param key 关键字
      */
     public void incr(String key){
-        try(Jedis jedis = this.getResource()){
+        try (Jedis jedis = this.getResource()) {
             jedis.incr(key);
-        }catch (Exception e){
-            log.error("jedis incr Key:{}", key, e);
-            throw new RuntimeException("Jedis incr Error");
         }
     }
 }

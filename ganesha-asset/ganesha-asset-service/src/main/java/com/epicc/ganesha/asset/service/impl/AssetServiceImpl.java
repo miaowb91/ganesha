@@ -1,7 +1,7 @@
 package com.epicc.ganesha.asset.service.impl;
 
 import com.epicc.ganesha.asset.service.AssetService;
-import com.epicc.ganesha.common.vo.Result;
+import com.epicc.ganesha.common.result.Result;
 import org.springframework.stereotype.Service;
 
 /**

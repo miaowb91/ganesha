@@ -1,6 +1,6 @@
 package com.epicc.ganesha.front.wap.service;
 
-import com.epicc.ganesha.common.vo.Result;
+import com.epicc.ganesha.common.result.Result;
 
 /**
  * Description: 发送短信DEMO

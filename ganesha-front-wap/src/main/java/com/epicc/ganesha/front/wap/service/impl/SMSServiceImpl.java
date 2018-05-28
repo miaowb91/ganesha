@@ -1,6 +1,6 @@
 package com.epicc.ganesha.front.wap.service.impl;
 
-import com.epicc.ganesha.common.vo.Result;
+import com.epicc.ganesha.common.result.Result;
 import com.epicc.ganesha.front.wap.service.SMSService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

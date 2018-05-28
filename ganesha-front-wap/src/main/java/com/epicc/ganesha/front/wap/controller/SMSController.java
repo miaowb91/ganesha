@@ -1,12 +1,12 @@
 package com.epicc.ganesha.front.wap.controller;
 
+import com.epicc.ganesha.common.result.Result;
+import com.epicc.ganesha.common.result.ResultCode;
 import com.epicc.ganesha.common.util.CommonUtil;
-import com.epicc.ganesha.common.vo.Result;
-import com.epicc.ganesha.common.vo.ResultCode;
+import com.epicc.ganesha.front.wap.config.APIErrorCode;
 import com.epicc.ganesha.front.wap.constant.Constant;
-import com.epicc.ganesha.front.wap.enums.APIErrorCode;
+import com.epicc.ganesha.front.wap.redis.JedisUtil;
 import com.epicc.ganesha.front.wap.service.SMSService;
-import com.epicc.ganesha.front.wap.util.JedisUtil;
 import com.epicc.ganesha.front.wap.util.Tools;
 import com.google.code.kaptcha.Producer;
 import lombok.extern.slf4j.Slf4j;
@@ -106,20 +106,14 @@ public class SMSController {
         //1. 验证手机号
         if(!CommonUtil.isMobile(mobile)){
             log.info("手机号验证失败:{}",mobile);
-            return Result.createByError(
-                    ResultCode.MOBILE_FORMAT_ERROR.getCode(),
-                    ResultCode.MOBILE_FORMAT_ERROR.getMsg()
-            );
+            return Result.createByError(ResultCode.MOBILE_FORMAT_ERROR);
         }
 
         //2. 手机号访问计数
         String visitKey = Constant.MOBILE_VISIT_KEY_PRE+mobile;
         if (!tools.increase(visitKey,MOBILE_VISIT_COUNT)){
             log.info("{} 超过访问次数:{}",mobile,MOBILE_VISIT_COUNT);
-            return Result.createByError(
-                    APIErrorCode.OVER_VISIT_ERROR.getCode(),
-                    APIErrorCode.OVER_VISIT_ERROR.getMsg()
-            );
+            return Result.createByError(APIErrorCode.OVER_VISIT_ERROR);
         }else{
             jedisUtil.incr(visitKey);
         }
@@ -129,30 +123,21 @@ public class SMSController {
         String captchaStore = jedisUtil.get(captchaKey);
         if(captchaStore == null || !captcha.equals(captchaStore)){
             jedisUtil.del(captchaKey); //删除KEY
-            return Result.createByError(
-                    APIErrorCode.CAPTCHA_ERROR.getCode(),
-                    APIErrorCode.CAPTCHA_ERROR.getMsg()
-            );
+            return Result.createByError(APIErrorCode.CAPTCHA_ERROR);
         }
 
         //4. 手机号发送计数
         String counterKey = Constant.MOBILE_COUNTER_KEY_PRE+mobile;
         if (!tools.increase(counterKey,MOBILE_LIMIT_COUNT)){
             log.info("{} 超过发送次数:{}",mobile,MOBILE_LIMIT_COUNT);
-            return Result.createByError(
-                    APIErrorCode.OVER_SEND_ERROR.getCode(),
-                    APIErrorCode.OVER_SEND_ERROR.getMsg()
-            );
+            return Result.createByError(APIErrorCode.OVER_SEND_ERROR);
         }
 
         //5. 判断发送间隔
         String sendKey = Constant.MOBILE_SEND_KEY_PRE+mobile;
         if (jedisUtil.exists(sendKey)) {
             log.info("{} 发送频率过高",mobile);
-            return Result.createByError(
-                    APIErrorCode.AFTER_TRY_ERROR.getCode(),
-                    APIErrorCode.AFTER_TRY_ERROR.getMsg()
-            );
+            return Result.createByError(APIErrorCode.AFTER_TRY_ERROR);
         }
 
         //6. 发送短信

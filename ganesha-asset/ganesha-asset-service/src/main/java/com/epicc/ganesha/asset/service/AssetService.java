@@ -1,6 +1,6 @@
 package com.epicc.ganesha.asset.service;
 
-import com.epicc.ganesha.common.vo.Result;
+import com.epicc.ganesha.common.result.Result;
 
 /**
  * Description: 资产管理服务层接口

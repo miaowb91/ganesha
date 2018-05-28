@@ -1,5 +1,7 @@
 package com.epicc.ganesha.common.vo;
 
+import com.epicc.ganesha.common.result.Result;
+import com.epicc.ganesha.common.result.ResultCode;
 import org.junit.Assert;
 import org.junit.Test;
 

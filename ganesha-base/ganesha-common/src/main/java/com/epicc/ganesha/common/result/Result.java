@@ -1,4 +1,4 @@
-package com.epicc.ganesha.common.vo;
+package com.epicc.ganesha.common.result;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -62,6 +62,7 @@ public class Result<T> implements Serializable {
         return new Result<>(ResultCode.SUCCESS.getCode(),msg,data);
     }
 
+
     /**
      * 返回失败
      */
@@ -75,6 +76,14 @@ public class Result<T> implements Serializable {
 
     public static <T> Result<T> createByError(String code, String msg){
         return new Result<>(code,msg);
+    }
+
+    public static <T> Result<T> createByError(ResultCode resultCode){
+        return new Result<>(resultCode.getCode(),resultCode.getMsg());
+    }
+
+    public static <T> Result<T> createByError(ResultCode resultCode,T data){
+        return new Result<>(resultCode.getCode(),resultCode.getMsg(),data);
     }
 
     public boolean isSuccess(){

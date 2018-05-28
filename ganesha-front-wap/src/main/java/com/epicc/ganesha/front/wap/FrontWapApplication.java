@@ -9,7 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * Created: 2018-05-23 15:15
  */
 @SpringBootApplication
-//@Import({CaptchaConfig.class, RedisConfig.class})
 public class FrontWapApplication {
 
     public static void main(String[] args) {
