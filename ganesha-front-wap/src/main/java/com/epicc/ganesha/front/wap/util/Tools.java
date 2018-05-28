@@ -1,5 +1,7 @@
 package com.epicc.ganesha.front.wap.util;
 
+import com.epicc.ganesha.redis.key.BasePrefix;
+import com.epicc.ganesha.redis.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,11 +14,11 @@ import org.springframework.stereotype.Component;
 public class Tools {
 
     //redis 工具类
-    private final JedisUtil jedisUtil;
+    private final RedisService redisService;
 
     @Autowired
-    public Tools(JedisUtil jedisUtil) {
-        this.jedisUtil = jedisUtil;
+    public Tools(RedisService redisService) {
+        this.redisService = redisService;
     }
 
     /**
@@ -24,14 +26,14 @@ public class Tools {
      * @param key   关键字
      * @param limit 限制总数
      */
-    public boolean increase(String key,Integer limit){
-        if(jedisUtil.exists(key)){
-            Integer visitCount = Integer.valueOf(jedisUtil.get(key));
+    public boolean increase(BasePrefix prefix,String key, Integer limit){
+        if(redisService.exists(prefix,key)){
+            Integer visitCount = redisService.get(prefix,key,Integer.class);
             if(visitCount>limit){
                 return false;
             }
         }else {
-            jedisUtil.set(key,"1");
+            redisService.set(prefix,key,1);
         }
         return true;
     }

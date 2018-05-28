@@ -10,6 +10,7 @@
     <modules>
         <module>ganesha-parent</module>
         <module>ganesha-common</module>
+        <module>ganesha-redis</module>
     </modules>
 
     <packaging>pom</packaging>

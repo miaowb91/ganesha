@@ -1,4 +1,4 @@
-package com.epicc.ganesha.front.wap.config;
+package com.epicc.ganesha.redis.config;
 
 import lombok.Getter;
 import lombok.Setter;

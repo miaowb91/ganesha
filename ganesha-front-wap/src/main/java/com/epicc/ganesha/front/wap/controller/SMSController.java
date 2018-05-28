@@ -4,10 +4,11 @@ import com.epicc.ganesha.common.result.Result;
 import com.epicc.ganesha.common.result.ResultCode;
 import com.epicc.ganesha.common.util.CommonUtil;
 import com.epicc.ganesha.front.wap.config.APIErrorCode;
-import com.epicc.ganesha.front.wap.constant.Constant;
-import com.epicc.ganesha.front.wap.redis.JedisUtil;
+import com.epicc.ganesha.front.wap.redis.CaptchaKey;
+import com.epicc.ganesha.front.wap.redis.MobileSendKey;
 import com.epicc.ganesha.front.wap.service.SMSService;
 import com.epicc.ganesha.front.wap.util.Tools;
+import com.epicc.ganesha.redis.service.RedisService;
 import com.google.code.kaptcha.Producer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,7 +39,7 @@ public class SMSController {
 
     //Redis简单客户端
     @Autowired
-    private JedisUtil jedisUtil;
+    private RedisService redisService;
 
     //简单工具类
     @Autowired
@@ -80,8 +81,7 @@ public class SMSController {
         BufferedImage bi = captchaProducer.createImage(capText);
 
         //4. 将验证码放入Redis
-        String key = Constant.CAPTCHA_KEY_PRE + mobile; //验证码 redis key
-        jedisUtil.set(key, capText,Constant.CAPTCHA_EXPIRED_TIME); //保存到redis
+        redisService.set(CaptchaKey.captchaMobile, mobile,capText); //保存到redis
 
         //5. 回写流
         try(ByteArrayOutputStream bao = new ByteArrayOutputStream()) {
@@ -103,6 +103,7 @@ public class SMSController {
             @RequestParam("captcha")String captcha
     ){
         log.info("mobile:{},captcha:{}",mobile,captcha);
+
         //1. 验证手机号
         if(!CommonUtil.isMobile(mobile)){
             log.info("手机号验证失败:{}",mobile);
@@ -110,32 +111,28 @@ public class SMSController {
         }
 
         //2. 手机号访问计数
-        String visitKey = Constant.MOBILE_VISIT_KEY_PRE+mobile;
-        if (!tools.increase(visitKey,MOBILE_VISIT_COUNT)){
+        if (!tools.increase(MobileSendKey.visit,mobile,MOBILE_VISIT_COUNT)){
             log.info("{} 超过访问次数:{}",mobile,MOBILE_VISIT_COUNT);
             return Result.createByError(APIErrorCode.OVER_VISIT_ERROR);
         }else{
-            jedisUtil.incr(visitKey);
+            redisService.incr(MobileSendKey.visit,mobile);
         }
 
         //3. 校验验证码
-        String captchaKey = Constant.SMS_VERIFY_KEY_PRE+mobile;
-        String captchaStore = jedisUtil.get(captchaKey);
+        String captchaStore = redisService.get(CaptchaKey.captchaMobile,mobile,String.class);
+        redisService.delete(CaptchaKey.captchaMobile,mobile);
         if(captchaStore == null || !captcha.equals(captchaStore)){
-            jedisUtil.del(captchaKey); //删除KEY
             return Result.createByError(APIErrorCode.CAPTCHA_ERROR);
         }
 
         //4. 手机号发送计数
-        String counterKey = Constant.MOBILE_COUNTER_KEY_PRE+mobile;
-        if (!tools.increase(counterKey,MOBILE_LIMIT_COUNT)){
+        if (!tools.increase(MobileSendKey.counter,mobile,MOBILE_LIMIT_COUNT)){
             log.info("{} 超过发送次数:{}",mobile,MOBILE_LIMIT_COUNT);
             return Result.createByError(APIErrorCode.OVER_SEND_ERROR);
         }
 
         //5. 判断发送间隔
-        String sendKey = Constant.MOBILE_SEND_KEY_PRE+mobile;
-        if (jedisUtil.exists(sendKey)) {
+        if (redisService.exists(MobileSendKey.gap,mobile)) {
             log.info("{} 发送频率过高",mobile);
             return Result.createByError(APIErrorCode.AFTER_TRY_ERROR);
         }
@@ -145,8 +142,8 @@ public class SMSController {
 
         //7. 设置发送间隔,发送成功计数
         if (sendResult.isSuccess()) {
-            jedisUtil.set(sendKey, mobile, Constant.MOBILE_SEND_EXPIRED_TIME);
-            jedisUtil.incr(counterKey);
+            redisService.set(MobileSendKey.gap, mobile,mobile);
+            redisService.incr(MobileSendKey.counter,mobile);
         }else{
             return sendResult;
         }
