@@ -39,7 +39,7 @@ public abstract class BasePrefix implements KeyPrefix{
      */
     @Override
     public String getPrefix() {
-        return "ganesha:"+getClass().getName().toLowerCase() + ":" + prefix;
+        return "ganesha:"+getClass().getSimpleName().toLowerCase() + ":" + prefix + ":";
     }
 
 }

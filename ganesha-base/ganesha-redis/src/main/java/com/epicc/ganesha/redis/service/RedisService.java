@@ -25,20 +25,6 @@ public class RedisService {
 	}
 
 	/**
-	 * redis 连接池获取 链接客户端
-	 */
-	private Jedis getResource(){
-		try{
-			log.debug("NumActive:{}",jedisPool.getNumActive());
-			log.debug("NumIdle:{}",jedisPool.getNumIdle());
-			log.debug("NumWaiters:{}",jedisPool.getNumWaiters());
-			return jedisPool.getResource();
-		}catch (Exception e){
-			log.error("getResource error",e.toString());
-			throw new RuntimeException("Jedis getResource Error");
-		}
-	}
-	/**
 	 * 获取当个对象
 	 * */
 	public <T> T get(KeyPrefix prefix, String key, Class<T> clazz) {
@@ -48,8 +34,7 @@ public class RedisService {
 			 //生成真正的key
 			 String realKey  = prefix.getPrefix() + key;
 			 String str = jedis.get(realKey);
-			 T t =  stringToBean(str, clazz);
-			 return t;
+             return stringToBean(str, clazz);
 		 }finally {
 			  returnToPool(jedis);
 		 }
@@ -83,7 +68,7 @@ public class RedisService {
 	/**
 	 * 判断key是否存在
 	 * */
-	public <T> boolean exists(KeyPrefix prefix, String key) {
+	public boolean exists(KeyPrefix prefix, String key) {
 		 Jedis jedis = null;
 		 try {
 			 jedis =  jedisPool.getResource();
@@ -114,13 +99,13 @@ public class RedisService {
 	/**
 	 * 增加值
 	 * */
-	public <T> Long incr(KeyPrefix prefix, String key) {
+	public Long incr(KeyPrefix prefix, String key) {
 		 Jedis jedis = null;
 		 try {
 			 jedis =  jedisPool.getResource();
-			//生成真正的key
+			 //生成真正的key
 			 String realKey  = prefix.getPrefix() + key;
-			return  jedis.incr(realKey);
+			 return  jedis.incr(realKey);
 		 }finally {
 			  returnToPool(jedis);
 		 }
@@ -129,13 +114,13 @@ public class RedisService {
 	/**
 	 * 减少值
 	 * */
-	public <T> Long decr(KeyPrefix prefix, String key) {
+	public Long decr(KeyPrefix prefix, String key) {
 		 Jedis jedis = null;
 		 try {
 			 jedis =  jedisPool.getResource();
-			//生成真正的key
+			 //生成真正的key
 			 String realKey  = prefix.getPrefix() + key;
-			return  jedis.decr(realKey);
+			 return  jedis.decr(realKey);
 		 }finally {
 			  returnToPool(jedis);
 		 }

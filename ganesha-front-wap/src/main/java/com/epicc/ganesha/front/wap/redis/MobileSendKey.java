@@ -9,7 +9,7 @@ import com.epicc.ganesha.redis.key.BasePrefix;
  */
 public class MobileSendKey extends BasePrefix{
 
-    public MobileSendKey(int expiredSeconds, String prefix) {
+    private MobileSendKey(int expiredSeconds, String prefix) {
         super(expiredSeconds, prefix);
     }
 

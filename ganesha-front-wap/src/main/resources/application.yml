@@ -1,6 +1,15 @@
 spring:
   application:
     name: WapFrontDemo
+  thymeleaf:
+    cache: false
+    content-type: text/xml
+    enabled: true
+    encoding: UTF-8
+    mode: HTML5
+    prefix: classpath:/templates/
+    suffix: .html
+
 server:
   port: 8000
 
@@ -13,3 +22,4 @@ redis:
   hosts: 127.0.0.1:6379
   db: 0
   password:
+
