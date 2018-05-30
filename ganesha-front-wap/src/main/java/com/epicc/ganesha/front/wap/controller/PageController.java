@@ -17,7 +17,7 @@ public class PageController {
 
     @RequestMapping(value = "/send",method = RequestMethod.GET)
     public String index(){
-        return "send";
+        return "captcha";
     }
 
 }
