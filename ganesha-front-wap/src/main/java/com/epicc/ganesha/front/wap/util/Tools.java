@@ -27,6 +27,8 @@ public class Tools {
      * @param limit 限制总数
      */
     public boolean increase(BasePrefix prefix,String key, Integer limit){
+
+        // 如果不存在新增一个计数器
         if(redisService.exists(prefix,key)){
             Integer visitCount = redisService.get(prefix,key,Integer.class);
             if(visitCount>limit){

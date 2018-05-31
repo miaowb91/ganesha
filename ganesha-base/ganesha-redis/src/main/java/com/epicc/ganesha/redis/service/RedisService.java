@@ -13,6 +13,12 @@ import redis.clients.util.Pool;
 import java.util.ArrayList;
 import java.util.List;
 
+
+/**
+ * Description: Redis 服务类
+ * Author: lishangmin
+ * Created: 2018-05-23 15:15
+ */
 @Slf4j
 @Service
 public class RedisService {

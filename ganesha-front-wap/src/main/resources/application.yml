@@ -32,8 +32,6 @@ management:
 #    name: test
 #    password: test
 
-
-
 kaptcha:
   properties:
     kaptcha.border: "no"
