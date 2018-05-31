@@ -42,10 +42,10 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
+        <!-- dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
+        </dependency -->
 
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -77,6 +77,12 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-io</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.octo.captcha</groupId>
+            <artifactId>jcaptcha</artifactId>
+            <version>1.0</version>
         </dependency>
 
     </dependencies>

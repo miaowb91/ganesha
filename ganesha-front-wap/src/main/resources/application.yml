@@ -27,8 +27,24 @@ management:
   security:
     enabled: false
 
-security:
-  user:
-    name: test
-    password: test
+#security:
+#  user:
+#    name: test
+#    password: test
+
+
+
+kaptcha:
+  properties:
+    kaptcha.border: "no"
+    kaptcha.textproducer.font.color: "black"
+    kaptcha.image.width: "125"
+    kaptcha.image.height: "45"
+    kaptcha.textproducer.font.size: "38"
+    kaptcha.textproducer.char.length: "4"
+    kaptcha.textproducer.font.names: 宋体,楷体,微软雅黑
+    kaptcha.textproducer.char.space: "2"
+    kaptcha.background.clear.from: "white"
+    kaptcha.background.clear.to: "white"
+    kaptcha.obscurificator.impl: "com.google.code.kaptcha.impl.ShadowGimpy"
 
