@@ -21,8 +21,7 @@ public class KaptchaConfig {
     @Bean(name="captchaProducer")
     public DefaultKaptcha getKaptchaBean(KaptchaProperties kaptchaProperties){
         DefaultKaptcha defaultKaptcha = new DefaultKaptcha();
-        Config config = new Config(kaptchaProperties.getProperties());
-        defaultKaptcha.setConfig(config);
+        defaultKaptcha.setConfig(new Config(kaptchaProperties.getProperties()));
         return defaultKaptcha;
     }
 
