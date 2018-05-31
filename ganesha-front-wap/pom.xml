@@ -6,7 +6,6 @@
         <artifactId>ganesha-parent</artifactId>
         <groupId>com.epicc</groupId>
         <version>0.0.1-SNAPSHOT</version>
-        <relativePath>../ganesha-base/ganesha-parent/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -19,6 +18,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-actuator</artifactId>
         </dependency>
 
         <dependency>
@@ -39,6 +43,21 @@
         </dependency>
 
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.github.penggle</groupId>
+            <artifactId>kaptcha</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.epicc</groupId>
             <artifactId>ganesha-common</artifactId>
             <version>0.0.1-SNAPSHOT</version>
@@ -53,6 +72,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-io</artifactId>
         </dependency>
 
     </dependencies>

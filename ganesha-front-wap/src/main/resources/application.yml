@@ -23,3 +23,12 @@ redis:
   db: 0
   password:
 
+management:
+  security:
+    enabled: true
+
+security:
+  user:
+    name: test
+    password: test
+
