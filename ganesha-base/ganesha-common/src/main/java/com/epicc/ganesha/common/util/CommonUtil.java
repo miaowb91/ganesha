@@ -1,8 +1,5 @@
 package com.epicc.ganesha.common.util;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -38,66 +35,6 @@ public class CommonUtil {
         Pattern pattern = Pattern.compile(regEx);
         Matcher matcher = pattern.matcher(str);
         return matcher.matches();
-    }
-
-    /**
-     * 校验是否为空
-     */
-    public static Integer checkNull(Integer value){
-        if(value == null){
-            return 0;
-        }
-        return value;
-    }
-
-    /**
-     * 校验是否为空
-     */
-    public static Double checkNull(Double value){
-        if(value == null){
-            return 0D;
-        }
-        return value;
-    }
-
-    /**
-     * 校验是否为空
-     */
-    public static Long checkNull(Long value){
-        if(value == null){
-            return 0L;
-        }
-        return value;
-    }
-
-    /**
-     * 校验是否为空
-     */
-    public static String checkNull(String value){
-        if(value == null){
-            return "";
-        }
-        return value;
-    }
-
-    /**
-     * 校验是否为空
-     */
-    public static List<String> checkNull(List<String> value){
-        if(value == null){
-            return new ArrayList<>();
-        }
-        return value;
-    }
-
-    /**
-     * 校验是否为空
-     */
-    public static BigDecimal checkNull(BigDecimal value) {
-        if(value == null){
-            return new BigDecimal(0.00);
-        }
-        return value;
     }
 
     /**
