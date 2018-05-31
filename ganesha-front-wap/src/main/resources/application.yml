@@ -25,7 +25,7 @@ redis:
 
 management:
   security:
-    enabled: true
+    enabled: false
 
 security:
   user:
