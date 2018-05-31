@@ -11,6 +11,6 @@ done
 echo "ganesha-front-wap start .... "
 echo "please wait a moment...."
 
-nohup java -Djava.security.egd=file:/dev/./urandom -jar ./target/ganesha-front-wap-0.0.1-SNAPSHOT-exec.jar >> ganesha_front_wap_nohup.out &
+nohup java -Dspring.output.ansi.enabled=always -Djava.security.egd=file:/dev/./urandom -jar ./target/ganesha-front-wap-0.0.1-SNAPSHOT-exec.jar >> ganesha_front_wap_nohup.out &
 
 echo "ganesha-front-wap end"
