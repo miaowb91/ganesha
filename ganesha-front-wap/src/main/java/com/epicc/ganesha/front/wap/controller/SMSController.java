@@ -4,6 +4,7 @@ import com.epicc.ganesha.common.result.Result;
 import com.epicc.ganesha.common.result.ResultCode;
 import com.epicc.ganesha.common.util.CommonUtil;
 import com.epicc.ganesha.front.wap.config.APIErrorCode;
+import com.epicc.ganesha.front.wap.exception.ApiException;
 import com.epicc.ganesha.front.wap.redis.CaptchaKey;
 import com.epicc.ganesha.front.wap.redis.MobileSendKey;
 import com.epicc.ganesha.front.wap.service.SMSService;
@@ -145,7 +146,7 @@ public class SMSController {
             redisService.set(MobileSendKey.gap, mobile,mobile);
             redisService.incr(MobileSendKey.counter,mobile);
         }else{
-            return sendResult;
+            return Result.createByError();
         }
         return Result.createBySuccess();
     }
@@ -164,10 +165,7 @@ public class SMSController {
         log.info("mobile:{},captcha:{},type:{}",mobile,captcha,t);
         //1. 验证手机号
         if(!CommonUtil.isMobile(mobile)){
-            return Result.createByError(
-                    ResultCode.MOBILE_FORMAT_ERROR.getCode(),
-                    ResultCode.MOBILE_FORMAT_ERROR.getMsg()
-            );
+            throw new ApiException(ResultCode.MOBILE_FORMAT_ERROR);
         }
         return Result.createBySuccess();
     }
