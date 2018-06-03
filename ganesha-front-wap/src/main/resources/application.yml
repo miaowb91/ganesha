@@ -1,14 +1,28 @@
 spring:
   application:
     name: WapFrontDemo
-  thymeleaf:
-    cache: false
-    content-type: text/html
-    enabled: true
-    encoding: UTF-8
-    mode: HTML5
-    prefix: classpath:/templates/
-    suffix: .html
+#  thymeleaf:
+#    cache: false
+#    content-type: text/html
+#    enabled: true
+#    encoding: UTF-8
+#    mode: HTML5
+#    prefix: classpath:/templates/
+#    suffix: .html
+  mvc:
+    view:
+      prefix: /
+      suffix: .html
+  resources:
+    chain:
+      cache: true
+      enabled: true
+      gzipped: true
+      html-application-cache: true
+    static-locations: classpath:/static/
+#    add-mappings: true
+    cache-period: 3600
+
 
 server:
   port: 8000
