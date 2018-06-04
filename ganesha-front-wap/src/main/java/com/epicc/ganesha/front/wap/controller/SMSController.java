@@ -9,21 +9,26 @@ import com.epicc.ganesha.front.wap.redis.CaptchaKey;
 import com.epicc.ganesha.front.wap.redis.MobileSendKey;
 import com.epicc.ganesha.front.wap.service.SMSService;
 import com.epicc.ganesha.front.wap.util.Tools;
+import com.epicc.ganesha.front.wap.validator.IsMobile;
 import com.epicc.ganesha.redis.service.RedisService;
 import com.google.code.kaptcha.Producer;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.imageio.ImageIO;
-import javax.validation.constraints.Size;
+import javax.validation.Valid;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
+import static com.epicc.ganesha.front.wap.constant.DefaultConstants.MOBILE_LIMIT_COUNT;
+import static com.epicc.ganesha.front.wap.constant.DefaultConstants.MOBILE_VISIT_COUNT;
 
 /**
  * Description: 验证短信防刷机制接口
@@ -33,6 +38,7 @@ import java.io.IOException;
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/sms")
+@Validated
 public class SMSController {
 
     //验证码生成器
@@ -51,41 +57,27 @@ public class SMSController {
     @Autowired
     private SMSService smsService;
 
-    //IP请求限制
-    private static Integer IP_LIMIT_COUNT = 500;
-
-    //手机请求限制
-    private static Integer MOBILE_LIMIT_COUNT = 5;
-
-    //手机只允许访问30次接口
-    private static Integer MOBILE_VISIT_COUNT = 30;
-
     /**
      * 获取验证码
      * @param mobile 手机号
      */
     @RequestMapping(value = "/captcha", method = RequestMethod.GET,produces = MediaType.IMAGE_PNG_VALUE)
     public byte[] captcha(
-            @Size(max = 5,min = 2) @RequestParam(value = "mobile") String mobile
+           @Valid @IsMobile @RequestParam(value = "mobile") String mobile
     ){
         log.info("mobile:{}",mobile);
 
-        //1. 验证手机号
-        if(!CommonUtil.isMobile(mobile)){
-            throw new ApiException(APIErrorCode.MOBILE_FORMAT_ERROR);
-        }
-
-        //2. 生成验证码
+        //生成验证码
         String capText = captchaProducer.createText();
         log.info("capText:{} ",capText);
 
-        //3. 生成图片流
+        //生成图片流
         BufferedImage bi = captchaProducer.createImage(capText);
 
-        //4. 将验证码放入Redis
+        //将验证码放入Redis
         redisService.set(CaptchaKey.captchaMobile, mobile,capText); //保存到redis
 
-        //5. 回写流
+        //回写流
         try(ByteArrayOutputStream bao = new ByteArrayOutputStream()) {
             ImageIO.write(bi, "png", bao);//生成流
             return bao.toByteArray();
@@ -101,16 +93,10 @@ public class SMSController {
      */
     @RequestMapping(value = "/send", method = RequestMethod.POST)
     public Result send(
-            @RequestParam("mobile") String mobile,
+            @Valid @IsMobile @RequestParam("mobile") String mobile,
             @RequestParam("captcha")String captcha
     ){
         log.info("mobile:{},captcha:{}",mobile,captcha);
-
-        //1. 验证手机号
-        if(!CommonUtil.isMobile(mobile)){
-            log.info("手机号验证失败:{}",mobile);
-            return Result.createByError(ResultCode.MOBILE_FORMAT_ERROR);
-        }
 
         //2. 手机号访问计数
         if (!tools.increase(MobileSendKey.visit,mobile,MOBILE_VISIT_COUNT)){

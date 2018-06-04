@@ -2,6 +2,7 @@ package com.epicc.ganesha.front.wap.adapter;
 
 import com.alibaba.fastjson.JSON;
 import com.epicc.ganesha.common.result.Result;
+import com.epicc.ganesha.front.wap.constant.DefaultConstants;
 import com.epicc.ganesha.front.wap.exception.ApiException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
@@ -14,6 +15,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
 import java.io.IOException;
 import java.util.List;
 
@@ -44,7 +46,17 @@ public class ExceptionHandlerAdapter extends WebMvcConfigurerAdapter {
                                         exception.getCode() + ":"+
                                         exception.getMessage()
                         );
-                    } else {
+                    }
+                    else if (e instanceof ConstraintViolationException){
+                        ConstraintViolationException exception = (ConstraintViolationException)e;
+                        result = Result.createByError(exception.getConstraintViolations().iterator().next().getMessage());
+                        log.error(
+                                handlerMethod.getBean().getClass().getSimpleName()+":"+
+                                        handlerMethod.getMethod().getName()+":"+
+                                        exception.getConstraintViolations().iterator().next().getMessage()
+                        );
+                    }
+                    else {
                         String message = String.format(
                                 "接口 [%s] 出现异常，方法：%s.%s，异常：%s 异常摘要：%s",
                                 httpServletRequest.getRequestURI(),
@@ -61,8 +73,8 @@ public class ExceptionHandlerAdapter extends WebMvcConfigurerAdapter {
                     result = Result.createByError();
                 }
                 //返回处理结果
-                httpServletResponse.setCharacterEncoding("UTF-8");
-                httpServletResponse.setHeader(HttpHeaders.CONTENT_TYPE, "application/json;charset=UTF-8");
+                httpServletResponse.setCharacterEncoding(DefaultConstants.ENCODING);
+                httpServletResponse.setHeader(HttpHeaders.CONTENT_TYPE, DefaultConstants.JSON_HEADER);
                 httpServletResponse.setStatus(HttpStatus.OK.value());
                 try {
                     httpServletResponse.getWriter().write(JSON.toJSONString(result));
