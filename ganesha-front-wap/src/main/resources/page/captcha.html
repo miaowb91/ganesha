@@ -13,7 +13,6 @@
         <script src="/jquery/jquery.min.js"></script>
         <script src="/bootstrap/js/bootstrap.min.js"></script>
 
-
     </head>
     <body>
         <div class="container">
@@ -50,13 +49,11 @@
             </form>
         </div>
         <script type="text/javascript">
-            /*<![CDATA[*/
-                $("#img_captcha").click(function () {
-                    var mobile = $("#mobile").val();
-                    var timestamp=new Date().getTime();
-                    $("img").attr("src","/api/v1/sms/captcha?mobile=13521336846&timestamp="+timestamp);
-                });
-            /*]]>*/
+            $("#img_captcha").click(function () {
+                var mobile = $("#mobile").val();
+                var timestamp=new Date().getTime();
+                $("img").attr("src","/api/v1/sms/captcha?mobile=13521336846&timestamp="+timestamp);
+            });
         </script>
     </body>
 </html>

@@ -19,10 +19,9 @@ spring:
       enabled: true
       gzipped: true
       html-application-cache: true
-    static-locations: classpath:/static/
-#    add-mappings: true
+    static-locations: classpath:/static/,classpath:/page/
+    add-mappings: true
     cache-period: 3600
-
 
 server:
   port: 8000

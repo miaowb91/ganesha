@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.imageio.ImageIO;
+import javax.validation.constraints.Size;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -65,13 +66,13 @@ public class SMSController {
      */
     @RequestMapping(value = "/captcha", method = RequestMethod.GET,produces = MediaType.IMAGE_PNG_VALUE)
     public byte[] captcha(
-            @RequestParam("mobile") String mobile
+            @Size(max = 5,min = 2) @RequestParam(value = "mobile") String mobile
     ){
         log.info("mobile:{}",mobile);
 
         //1. 验证手机号
         if(!CommonUtil.isMobile(mobile)){
-            return null;
+            throw new ApiException(APIErrorCode.MOBILE_FORMAT_ERROR);
         }
 
         //2. 生成验证码

@@ -1,5 +1,8 @@
 package com.epicc.ganesha.common.result;
 
+import com.alibaba.fastjson.annotation.JSONField;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +15,7 @@ import java.io.Serializable;
  */
 @Getter
 @Setter
+@JsonSerialize(include =  JsonSerialize.Inclusion.NON_NULL)
 public class Result<T> implements Serializable {
 
     /**
@@ -62,7 +66,6 @@ public class Result<T> implements Serializable {
         return new Result<>(ResultCode.SUCCESS.getCode(),msg,data);
     }
 
-
     /**
      * 返回失败
      */
@@ -86,10 +89,11 @@ public class Result<T> implements Serializable {
         return new Result<>(resultCode.getCode(),resultCode.getMsg(),data);
     }
 
+    //JackSon Ignore For RestController
+    @JsonIgnore
+    //FastJson Ignore For Normal Used
+    @JSONField(serialize = false)
     public boolean isSuccess(){
-        if(code.equals(ResultCode.SUCCESS.getCode())){
-            return true;
-        }
-        return false;
+        return code.equals(ResultCode.SUCCESS.getCode());
     }
 }
