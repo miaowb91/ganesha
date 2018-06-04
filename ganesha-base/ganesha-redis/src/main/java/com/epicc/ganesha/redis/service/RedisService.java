@@ -116,6 +116,18 @@ public class RedisService {
 			  returnToPool(jedis);
 		 }
 	}
+
+	public Long incr(String prefix, String key) {
+		Jedis jedis = null;
+		try {
+			jedis =  jedisPool.getResource();
+			//生成真正的key
+			String realKey  = prefix + key;
+			return  jedis.incr(realKey);
+		}finally {
+			returnToPool(jedis);
+		}
+	}
 	
 	/**
 	 * 减少值

@@ -18,4 +18,8 @@ public class MobileSendKey extends BasePrefix{
     public static MobileSendKey counter = new MobileSendKey(60 * 60 * 24,"counter");
 
     public static MobileSendKey gap = new MobileSendKey(60,"gap");
+
+    public static MobileSendKey withExpire(int expireSeconds) {
+        return new MobileSendKey(expireSeconds, "visit");
+    }
 }

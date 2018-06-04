@@ -5,6 +5,7 @@ import com.epicc.ganesha.common.result.ResultCode;
 import com.epicc.ganesha.common.util.CommonUtil;
 import com.epicc.ganesha.front.wap.config.APIErrorCode;
 import com.epicc.ganesha.front.wap.exception.ApiException;
+import com.epicc.ganesha.front.wap.interceptor.AccessLimit;
 import com.epicc.ganesha.front.wap.redis.CaptchaKey;
 import com.epicc.ganesha.front.wap.redis.MobileSendKey;
 import com.epicc.ganesha.front.wap.service.SMSService;
@@ -28,7 +29,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import static com.epicc.ganesha.front.wap.constant.DefaultConstants.MOBILE_LIMIT_COUNT;
-import static com.epicc.ganesha.front.wap.constant.DefaultConstants.MOBILE_VISIT_COUNT;
 
 /**
  * Description: 验证短信防刷机制接口
@@ -91,20 +91,13 @@ public class SMSController {
      * @param mobile   手机号
      * @param captcha  验证码
      */
+    @AccessLimit(seconds = 60 * 5,limit = 10,key = "mobile")
     @RequestMapping(value = "/send", method = RequestMethod.POST)
     public Result send(
             @Valid @IsMobile @RequestParam("mobile") String mobile,
             @RequestParam("captcha")String captcha
     ){
         log.info("mobile:{},captcha:{}",mobile,captcha);
-
-        //2. 手机号访问计数
-        if (!tools.increase(MobileSendKey.visit,mobile,MOBILE_VISIT_COUNT)){
-            log.info("{} 超过访问次数:{}",mobile,MOBILE_VISIT_COUNT);
-            return Result.createByError(APIErrorCode.OVER_VISIT_ERROR);
-        }else{
-            redisService.incr(MobileSendKey.visit,mobile);
-        }
 
         //3. 校验验证码
         String captchaStore = redisService.get(CaptchaKey.captchaMobile,mobile,String.class);
