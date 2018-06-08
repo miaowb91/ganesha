@@ -2,10 +2,9 @@ package com.epicc.ganesha.front.wap.exception;
 
 import com.alibaba.fastjson.JSON;
 import com.epicc.ganesha.common.result.Result;
-import com.epicc.ganesha.front.wap.constant.DefaultConstants;
+import com.epicc.ganesha.front.wap.util.Tools;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerExceptionResolver;
@@ -14,7 +13,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
-import java.io.IOException;
 
 /**
  * Description:
@@ -24,6 +22,9 @@ import java.io.IOException;
 @Component
 @Slf4j
 public class ExceptionResolver implements HandlerExceptionResolver {
+
+    @Autowired
+    Tools tools;
 
     @Override
     public ModelAndView resolveException(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object handler, Exception e) {
@@ -67,12 +68,9 @@ public class ExceptionResolver implements HandlerExceptionResolver {
             result = Result.createByError();
         }
         //返回处理结果
-        httpServletResponse.setCharacterEncoding(DefaultConstants.ENCODING);
-        httpServletResponse.setHeader(HttpHeaders.CONTENT_TYPE, DefaultConstants.JSON_HEADER);
-        httpServletResponse.setStatus(HttpStatus.OK.value());
         try {
-            httpServletResponse.getWriter().write(JSON.toJSONString(result));
-        } catch (IOException ex) {
+            tools.render(httpServletResponse,JSON.toJSONString(result));
+        } catch (Exception ex) {
             log.error(ex.getMessage());
         }
         return new ModelAndView();

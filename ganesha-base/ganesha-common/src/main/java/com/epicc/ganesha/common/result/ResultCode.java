@@ -10,11 +10,9 @@ import lombok.Getter;
 @Getter
 public class ResultCode {
 
-    public static ResultCode SUCCESS = new ResultCode("0000000","成功");
+    public static ResultCode SUCCESS = new ResultCode("000000","成功");
 
-    public static ResultCode ERROR = new ResultCode("100000","失败");
-
-    public static ResultCode MOBILE_FORMAT_ERROR = new ResultCode("200001","手机号码格式错误");
+    public static ResultCode ERROR   = new ResultCode("100000","失败");
 
     /**
      * 状态码

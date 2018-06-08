@@ -2,10 +2,9 @@ package com.epicc.ganesha.front.wap.interceptor;
 
 import com.alibaba.fastjson.JSON;
 import com.epicc.ganesha.common.result.Result;
-import com.epicc.ganesha.common.result.ResultCode;
 import com.epicc.ganesha.front.wap.config.APIErrorCode;
-import com.epicc.ganesha.front.wap.constant.DefaultConstants;
 import com.epicc.ganesha.front.wap.redis.MobileSendKey;
+import com.epicc.ganesha.front.wap.util.Tools;
 import com.epicc.ganesha.redis.key.KeyPrefix;
 import com.epicc.ganesha.redis.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.OutputStream;
 
 /**
  * Description: 限流注解实现
@@ -27,6 +25,9 @@ public class AccessInterceptor extends HandlerInterceptorAdapter {
 
     @Autowired
     RedisService redisService;
+
+    @Autowired
+    Tools tools;
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
@@ -47,20 +48,13 @@ public class AccessInterceptor extends HandlerInterceptorAdapter {
             }else if(count < limit){
                 redisService.incr(keyPrefix, keyValue);
             }else{
-                render(response, APIErrorCode.OVER_VISIT_ERROR);
+                String str  = JSON.toJSONString(Result.createByError(APIErrorCode.OVER_VISIT_ERROR));
+                tools.render(response, str);
                 return false;
             }
         }
         return true;
     }
 
-    private void render(HttpServletResponse response, ResultCode resultCode)throws Exception {
-        response.setContentType(DefaultConstants.JSON_HEADER);
-        OutputStream out = response.getOutputStream();
-        String str  = JSON.toJSONString(Result.createByError(resultCode));
-        out.write(str.getBytes(DefaultConstants.ENCODING));
-        out.flush();
-        out.close();
-    }
 
 }
